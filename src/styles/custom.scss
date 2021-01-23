@@ -1,0 +1,53 @@
+$primary: #0278AE;
+$warning: #07689F;
+$info : #0278AE;
+$dark: #000000;
+$success:#404040;
+$secondary: #EAB939;
+$navbar-dark-color: #ffffff;
+$danger:#8692A6;
+$spacer: 1rem !default;
+$spacers: () !default;
+$spacers: map-merge(
+  (
+    0: 0,
+    1: ($spacer * .25),
+    2: ($spacer * .5),
+    3: $spacer,
+    4: ($spacer * 1.5),
+    5: ($spacer * 3),
+    6: ($spacer * 19),
+    7: ($spacer * 33),
+    8: ($spacer *10),
+    9: ($spacer * 7),
+    10: ($spacer * 26),
+    11: ($spacer *4),
+    12: ($spacer *22),
+    13: (12px),
+    14: ($spacer * 12),
+    15:($spacer*2),
+    16:($spacer*5),
+    17: ($spacer * .75),
+    18: ($spacer * 15),
+    19: ($spacer * 1.25),
+    20: ($spacer * 1.75),
+    21: ($spacer * 6),
+    22: (14px),
+    23:(7px),
+    24:(9px)
+  ),
+  $spacers
+);
+$sizes: () !default;
+$sizes: map-merge(
+  (
+    25: 25%,
+    50: 50%,
+    75: 75%,
+    100: 100%,
+    auto: auto,
+    56: 56%
+  ),
+  $sizes
+);
+@import 'node_modules/bootstrap/scss/bootstrap'
