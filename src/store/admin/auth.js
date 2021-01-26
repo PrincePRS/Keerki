@@ -14,13 +14,12 @@ export default {
     async login(context, { userId, password }) {
       try {
         const response = await authApi.login(userId, password);
-
-        if (response.status === 200) {
-          context.commit('setToken', response.data.token);
-        }
+        
+        // if (response.status === 200) {
+        //   context.commit('setToken', response.data.token);
+        // }
       } catch (e) {
-          console.log(e);
-        alert('Please check UserId and Password!');
+        // console.log('Please check UserId and Password!');
       }
     },
     loginWithoutAsync(context, { userId, password }) {
@@ -29,7 +28,6 @@ export default {
           context.commit('setToken', response.data.token);
         }
       }).catch(e => {
-        console.log(e);
         alert('Please check UserId and Password!');
       });
     }

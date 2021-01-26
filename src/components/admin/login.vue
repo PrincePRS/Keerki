@@ -2,7 +2,7 @@
   <div
     class="min-vh-100 w-100 d-flex justify-content-center align-items-center login-bg"
   >
-    <form class="w-84" v-on:submit="handleSubmit">
+    <!-- <form class="w-84" v-on:submit="handleSubmit"> -->
       <div
         class="d-flex justify-content-center align-items-center flex-column w-100"
       >
@@ -38,7 +38,7 @@
             class="border border-white rounded-lg text-white login-input w-100 outline-none px-5"
             :placeholder="`${$t('loginUserName')}`"
             type="text"
-            v-model="userName"
+            v-model="userId"
             v-on:change="handleUserName"
             required
           />
@@ -69,6 +69,7 @@
           <input
             class="border border-white rounded-lg text-white login-input w-100 outline-none px-5"
             :placeholder="`${$t('loginUserPassword')}`"
+            v-model="password"
             type="password"
             required
           />
@@ -76,6 +77,7 @@
         <div v-if="this.$i18n.locale == 'ar'" class="w-300">
           <button
             class="btn w-100 login-input shadow-md btn-white btn-light mt-5"
+            @click="handleSubmit"
             type="submit"
           >
             {{ $t("loginBtn") }}
@@ -87,6 +89,7 @@
         <div v-else class="w-300 ml-22">
           <button
             class="btn w-100 login-input shadow-md btn-white btn-light mt-5"
+            v-on:click="handleSubmit"
             type="submit"
           >
             {{ $t("loginBtn") }}
@@ -96,7 +99,7 @@
           </p>
         </div>
       </div>
-    </form>
+    <!-- </form> -->
   </div>
 </template>
 <script>
@@ -107,24 +110,24 @@ export default {
   data() {
     return {
       type: 0,
-      userName: "",
+      userId: "",
+      password: ""
     };
   },
   methods: {
-    login() {
-      this.$store.dispatch('admin_auth/login', {
-        userId: this.userid,
-        password: this.password
-      });
-    },
+
     handleUserName() {
-      this.type = parseInt(this.userName);
+      this.type = parseInt(this.userId);
     },
     handleSubmit() {
-      if (this.userName == "nick") localStorage.setItem("role", "employee");
-      else localStorage.setItem("role", "admin");
-
-      this.$router.push({ path: "/admin/dashboard" }).catch(() => {});
+      // if (this.userId == "nick") localStorage.setItem("role", "employee");
+      // else localStorage.setItem("role", "admin");
+      console.log('***********');
+      this.$store.dispatch('admin_auth/login', {
+        userId: this.userId,
+        password: this.password
+      });
+      //this.$router.push({ path: "/admin/dashboard" }).catch(() => {});
     },
   },
 };

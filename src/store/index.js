@@ -4,8 +4,10 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 import admin_auth from './admin/auth';
-import client_auth from './client/auth';
-import error from './error';
+import admin_error from './admin/error';
+import auth from './client/auth';
+import error from './client/auth';
+
 
 export default new Vuex.Store({
   state: {
@@ -16,7 +18,8 @@ export default new Vuex.Store({
   },
   modules: {
     admin_auth,
-    client_auth,
+    admin_error,
+    auth,
     error
   }
 })

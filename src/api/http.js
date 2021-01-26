@@ -6,26 +6,30 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(function(config){
-    if(store.state.auth.token !== null){
+    if(store.state.admin_auth.token !== null){
         config['headers'] = {
-            'Authorization': `Keerki ${store.auth.token}`
+            Authorization: `Bearer ${store.state.admin_auth.token}`
         };
     }
     return config;
 });
 
+
+
 instance.interceptors.response.use(function (response) {
-        store.commit('error/setValidationError', {});
+        // store.commit('error/setValidationError', {});
         return response;
     }, function (error) {
-    if (error.response.status === 422) {
-        store.commit('error/setValidationError', error.response.data.data);
-    }else if(error.response.status === 423){
-        ///  set error.
-    } 
-    else {
         return Promise.reject(error);
-    }
+        // console.log(error);
+        // if (error.response.status === 422) {
+        //     // store.commit('error/setValidationError', error.response.data.data);
+        // }else if(error.response.status === 423){
+        //     console.log(error);
+        // }
+        // else {
+        //     return Promise.reject(error);
+        // }
 });
   
   export default instance;
