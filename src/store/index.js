@@ -3,10 +3,8 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-import admin_auth from './admin/auth';
-import admin_error from './admin/error';
-import auth from './client/auth';
-import error from './client/auth';
+import auth from './auth';
+import error from './error';
 
 
 export default new Vuex.Store({
@@ -17,8 +15,6 @@ export default new Vuex.Store({
   actions: {
   },
   modules: {
-    admin_auth,
-    admin_error,
     auth,
     error
   }

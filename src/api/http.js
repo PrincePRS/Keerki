@@ -6,9 +6,9 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(function(config){
-    if(store.state.admin_auth.token !== null){
+    if(store.state.auth.token !== null){
         config['headers'] = {
-            Authorization: `Bearer ${store.state.admin_auth.token}`
+            Authorization: `Bearer ${store.state.auth.token}`
         };
     }
     return config;
@@ -21,15 +21,15 @@ instance.interceptors.response.use(function (response) {
         return response;
     }, function (error) {
         return Promise.reject(error);
-        // console.log(error);
-        // if (error.response.status === 422) {
-        //     // store.commit('error/setValidationError', error.response.data.data);
-        // }else if(error.response.status === 423){
-        //     console.log(error);
-        // }
-        // else {
-        //     return Promise.reject(error);
-        // }
+        console.log(error);
+        if (error.response.status === 422) {
+            // store.commit('error/setValidationError', error.response.data.data);
+        }else if(error.response.status === 423){
+            console.log(error);
+        }
+        else {
+            return Promise.reject(error);
+        }
 });
   
   export default instance;

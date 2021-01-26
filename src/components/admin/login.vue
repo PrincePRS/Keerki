@@ -123,7 +123,7 @@ export default {
       // if (this.userId == "nick") localStorage.setItem("role", "employee");
       // else localStorage.setItem("role", "admin");
       console.log('***********');
-      this.$store.dispatch('admin_auth/login', {
+      this.$store.dispatch('auth/login', {
         userId: this.userId,
         password: this.password
       });
