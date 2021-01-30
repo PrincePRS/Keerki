@@ -1,10 +1,10 @@
 <template>
   <div
-    class="min-vh-100 w-100 d-flex justify-content-center align-items-center login-bg"
+    class="min-vh-100 w-150 d-flex justify-content-center align-items-center login-bg"
   >
     <!-- <form class="w-84" v-on:submit="handleSubmit"> -->
       <div
-        class="d-flex justify-content-center align-items-center flex-column w-100"
+        class="d-flex justify-content-center align-items-center flex-column w-150"
       >
         <img src="../../assets/logo.png" width="275" height="86" />
         <div
@@ -38,7 +38,7 @@
             class="border border-white rounded-lg text-white login-input w-100 outline-none px-5"
             :placeholder="`${$t('loginUserName')}`"
             type="text"
-            v-model="userId"
+            v-model="email"
             v-on:change="handleUserName"
             required
           />
@@ -110,24 +110,29 @@ export default {
   data() {
     return {
       type: 0,
-      userId: "",
-      password: ""
+      email: "admin@gmail.com",
+      password: "qqqqqq"
     };
   },
   methods: {
 
     handleUserName() {
-      this.type = parseInt(this.userId);
+      this.type = parseInt(this.email);
     },
     handleSubmit() {
       // if (this.userId == "nick") localStorage.setItem("role", "employee");
       // else localStorage.setItem("role", "admin");
-      console.log('***********');
       this.$store.dispatch('auth/login', {
-        userId: this.userId,
+        email: this.email,
         password: this.password
+      }).then(()=>{
+        if(this.$store.state.error.validations === 200){
+          
+          this.$router.push({ path: "/admin/dashboard" }).catch(() => {}); 
+        }else{
+          this.type = this.$store.state.error.validations;
+        }
       });
-      //this.$router.push({ path: "/admin/dashboard" }).catch(() => {});
     },
   },
 };

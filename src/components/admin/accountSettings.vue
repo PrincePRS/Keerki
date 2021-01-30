@@ -4,7 +4,7 @@
       <label class="file-select align-self-center">
         <div class="select-button d-flex flex-column">
           <img
-            src="../../assets/adminSettings.png"
+            v-bind:src="avatar"
             width="130"
             height="130"
             class="rounded-circle p-1 border-select-file rounded-circle"
@@ -15,13 +15,14 @@
             {{ $t("adminAccountSetNewPhoto") }}
           </span>
         </div>
-        <input type="file" @change="handleFileChange" />
+        <input type="file" id="avatar" @change="handleFileChange" />
       </label>
       <div
         class="width-85 pb-11 flex-column admin-settings-form d-flex justify-content-center align-items-center"
       >
         <b-modal
           id="admin-name-modal"
+          ref="admin-name-modal"
           centered
           hide-footer
           content-class="content-class"
@@ -35,7 +36,8 @@
             <input
               class="border-bottom outline-none w-100 pb-4"
               :placeholder="`${$t('adminAccountFullName')}`"
-              v-model="name"
+              :value="name"
+              id="editname"
             />
           </div>
           <div class="d-flex justify-content-end">
@@ -47,7 +49,7 @@
             </button>
             <button
               class="rounded-pill color-ff modal-button outline-none ml-2"
-              @click="$bvModal.hide('admin-name-modal')"
+              @click="SaveValue('name')"
             >
               {{ $t("adminAccountSave") }}
             </button>
@@ -87,12 +89,13 @@
         <div
           class="w-90 border-a9a9 py-4 d-flex justify-content-between align-items-center"
         >
-          <p class="mb-0 text-muted font-italic">{{ $t("adminAccountEmail") }} HEDI@MAIL.COM</p>
+          <p class="mb-0 text-muted font-italic">{{ $t("adminAccountEmail") }} {{email}}</p>
           <p class="mb-0 text-muted font-italic">{{ $t("adminAccountCannotEdit") }}</p>
         </div>
 
         <b-modal
           id="admin-phone-modal"
+          ref="admin-phone-modal"
           centered
           hide-footer
           content-class="content-class"
@@ -106,7 +109,8 @@
             <input
               class="border-bottom outline-none w-100 pb-4"
               :placeholder="`${$t('adminAccountPhoneNumber')}`"
-              v-model="number"
+              id="editphone"
+              :value="number"
               type="number"
               oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
               maxlength="15"
@@ -121,7 +125,7 @@
             </button>
             <button
               class="rounded-pill color-ff modal-button outline-none ml-2"
-              @click="$bvModal.hide('admin-phone-modal')"
+              @click="SaveValue('phone')"
             >
               {{ $t("adminAccountSave") }}
             </button>
@@ -161,6 +165,7 @@
 
 <b-modal
               id="admin-password-modal"
+              ref="admin-password-modal"
               centered
               hide-footer
               content-class="content-class"
@@ -172,9 +177,10 @@
                 class="d-flex w-100 justify-content-center align-items-center py-4"
               >
                 <input
+                  type="password"
+                  id="oldpassword"
                   class="border-bottom outline-none w-100 pb-4"
                   :placeholder="`${$t('adminAccountOldPassword')}`"
-                  v-modal="password"
                 />
               </div>
               <div
@@ -182,6 +188,7 @@
               >
                 <input
                   class="border-bottom outline-none w-100 pb-4"
+                  id="editpassword"
                   :placeholder="`${$t('adminAccountNewPassword')}`"
                 />
               </div>
@@ -190,6 +197,7 @@
               >
                 <input
                   class="border-bottom outline-none w-100 pb-4"
+                  id="confirmpassword"
                   :placeholder="`${$t('adminAccountConfirmPassword')}`"
                 />
               </div>
@@ -202,7 +210,7 @@
                 </button>
                 <button
                   class="rounded-pill color-ff modal-button outline-none ml-2"
-                  @click="$bvModal.hide('admin-password-modal')"
+                  @click="SaveValue('password')"
                 >
                   {{ $t("adminAccountSave") }}
                 </button>
@@ -253,20 +261,39 @@ export default {
   name: "AdminAccount",
   data() {
     return {
-      name: "HEDI",
-      number: 212312312312,
-      password: "************************",
+      avatar: localStorage.getItem('avatar'),
+      email: JSON.parse(localStorage.getItem('userInfo')).email,
+      name: JSON.parse(localStorage.getItem('userInfo')).f_name + " " + JSON.parse(localStorage.getItem('userInfo')).l_name,
+      number: JSON.parse(localStorage.getItem('userInfo')).phone,
+      password: JSON.parse(localStorage.getItem('userInfo')).password,
     };
   },
   methods: {
+    SaveValue(field){
+      this.$store.dispatch('auth/updateAccount',{
+        email: this.email,
+        name: field == 'name' ? document.getElementById('editname').value : '',
+        phone: field == 'phone' ? document.getElementById('editphone').value : '',
+        password: field == 'password' ? document.getElementById('editpassword').value : '',
+      }).then(()=>{
+        if(this.$store.state.error.validations === 200){
+          this.name = JSON.parse(localStorage.getItem('userInfo')).f_name + " " + JSON.parse(localStorage.getItem('userInfo')).l_name;
+          this.number = JSON.parse(localStorage.getItem('userInfo')).phone;
+          this.password = JSON.parse(localStorage.getItem('userInfo')).password;
+          this.$refs['admin-' + field + '-modal'].hide();
+        }
+      });
+    },
     handleFileChange(e) {
-      this.$emit("input", e.target.files[0]);
-      var output = document.getElementById("adminImage");
-      output.src = URL.createObjectURL(event.target.files[0]);
-      this.profile = true;
-      output.onload = function () {
-        URL.revokeObjectURL(output.src);
-      };
+      var formData = new FormData();
+      formData.append('file', e.target.files[0]);
+      formData.append('email', this.email);
+      this.$store.dispatch('auth/updateAvatar', formData).then(()=>{
+        if(this.$store.state.error.validations === 200){
+          this.avatar = localStorage.getItem('avatar');
+           
+        }
+      });
     },
   },
 };

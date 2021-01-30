@@ -7,19 +7,22 @@ const instance = axios.create({
 
 instance.interceptors.request.use(function(config){
     if(store.state.auth.token !== null){
-        config['headers'] = {
-            Authorization: `Bearer ${store.state.auth.token}`
-        };
+        // config['headers'] = {
+        //     'Authorization': `Bearer ${store.state.auth.token}`,
+        //     'Content-Type': 'multipart/form-data'
+        // };
+        config['headers']['Authorization'] = `Bearer ${store.state.auth.token}`;
     }
     return config;
 });
 
-
-
 instance.interceptors.response.use(function (response) {
-        // store.commit('error/setValidationError', {});
+        store.commit('error/setValidationError', response.data.code);
         return response;
     }, function (error) {
+        console.log('failed');
+        console.log(error);
+        store.commit('error/setValidationError', error.response.status);
         return Promise.reject(error);
         console.log(error);
         if (error.response.status === 422) {
@@ -32,5 +35,4 @@ instance.interceptors.response.use(function (response) {
         }
 });
   
-  export default instance;
-
+export default instance;

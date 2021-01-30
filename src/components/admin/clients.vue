@@ -39,16 +39,47 @@
         <p class="mb-0">{{$t('exportCsv')}}</p>
       </button>
     </div>
-    <ClientsTable/>
+    <ClientsTable
+        :data="clients"
+        :total-pages="Math.ceil(clients.length / perPage)"
+        :total="clients.length"
+        :per-page="perPage"
+        :current-page="currentPage"
+        @pagechanged="onPageChange"
+        @perPageChanged="onPerPageChange"
+    />
   </div>
 </template>
 <script>
 import ClientsTable from './clientsTable'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: "AdminClients",
+  data(){
+    return {
+      currentPage : 1,
+      perPage : 10,
+    }
+  },
   components:{
     ClientsTable
   },
+  methods:{
+    ...mapActions('client', ['getAllClients']),
+    onPageChange(page){
+      this.currentPage = page;
+    },
+    onPerPageChange(count){
+      this.perPage = count;
+      this.currentPage = 1;
+    }
+  },
+  mounted(){
+    this.getAllClients();
+  },
+  computed:{
+    ...mapGetters('client', ['clients'])
+  }
   
 };
 </script>

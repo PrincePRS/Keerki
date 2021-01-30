@@ -18,9 +18,10 @@
                     $t("clientDetailsName")
                   }}</span>
                   <input
-                    value="David Smith Will"
+                    :value="selected.name"
                     class="outline-none px-2 font-weight-bold"
                     type="text"
+                    id="edit_name"
                     :disabled="isDisabled"
                   />
                 </div>
@@ -32,7 +33,8 @@
                   }}</span>
 
                   <input
-                    value="Guangzhou, street no 15"
+                    :value="selected.com_address"
+                    id="edit_com_address"
                     class="outline-none px-2 font-weight-bold"
                     type="text"
                     :disabled="isDisabled"
@@ -47,7 +49,8 @@
                     $t("clientDetailsCompanyName")
                   }}</span>
                   <input
-                    value="Shudi"
+                    :value="selected.com_name"
+                    id="edit_com_name"
                     class="outline-none px-2 font-weight-bold"
                     type="text"
                     :disabled="isDisabled"
@@ -60,10 +63,11 @@
                     $t("clientDetailsEmail")
                   }}</span>
                   <input
-                    value="david@email.com"
+                    :value="selected.email"
+                    id="edit_email"
                     class="outline-none px-2 font-weight-bold"
                     type="email"
-                    :disabled="isDisabled"
+                    disabled
                   />
                 </div>
               </td>
@@ -76,7 +80,8 @@
                   }}</span>
 
                   <input
-                    value="187171717"
+                    :value="selected.phone"
+                    id="edit_com_phone"
                     class="outline-none px-2 font-weight-bold"
                     type="number"
                     :disabled="isDisabled"
@@ -90,7 +95,8 @@
                   }}</span>
 
                   <input
-                    value="1123232323"
+                    :value="selected.whatsapp"
+                    id="edit_whatsapp"
                     class="outline-none px-2 font-weight-bold"
                     type="number"
                     :disabled="isDisabled"
@@ -106,7 +112,8 @@
                   }}</span>
 
                   <input
-                    value="$1873"
+                    :value="selected.person_in_charge"
+                    id="edit_person_in_charge"
                     class="outline-none px-2 font-weight-bold"
                     type="text"
                     :disabled="isDisabled"
@@ -122,9 +129,9 @@
                     v-if="isDisabled"
                     class="btn btn-dark px-4 outline-none py-0"
                   >
-                    {{memberShip}}
+                    {{selected.membership}}
                   </button>
-                  <input v-else class="px-2 outline-none" v-model="memberShip" :placeholder="`${$t('clientMemberShipVip')}`" />
+                  <input v-else class="px-2 outline-none" :value="selected.membership" id="edit_membership" :placeholder="`${$t('clientMemberShipVip')}`" />
                 </p>
               </td>
             </tr>
@@ -419,10 +426,7 @@
               </button>
               <button
                 class="rounded-lg btn btn-primary outline-none ml-2"
-                @click="
-                  $bvModal.hide('reset-modal');
-                  isDisabled = true;
-                "
+                @click="saveCompanyInfo"
               >
                 {{ $t("companySave") }}
               </button>
@@ -512,6 +516,7 @@
 <script>
 import Vue from "vue";
 import DetailedClientsTable from "./detailedClientTable";
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: "ClientDetailed",
   components: {
@@ -540,7 +545,14 @@ export default {
       isDisabled: true,
     };
   },
+  mounted(){
+    this.getClientFromEmail(localStorage.selected);
+  },
+  computed:{
+       ...mapGetters('client', ['selected']),
+  },
   methods: {
+    ...mapActions('client', ['getClientFromEmail']),
     changeColor(color, index) {
       let d = this.tags[index];
       d.color = color;
@@ -551,6 +563,27 @@ export default {
     },
     saveHandler() {
       this.$bvModal.show("reset-modal");
+    },
+    saveCompanyInfo(){
+      this.$store.dispatch('client/updateCompanyInfo',{
+        email: document.getElementById('edit_email').value,
+        name: document.getElementById('edit_name').value,
+        com_phone: document.getElementById('edit_com_phone').value,
+        com_address: document.getElementById('edit_com_address').value,
+        com_name: document.getElementById('edit_com_name').value,
+        whatsapp: document.getElementById('edit_whatsapp').value,
+        membership: document.getElementById('edit_membership').value,
+        person_in_charge: document.getElementById('edit_person_in_charge').value,
+      }).then(()=>{
+        if(this.$store.state.error.validations === 200){
+          // this.name = JSON.parse(localStorage.getItem('userInfo')).f_name + " " + JSON.parse(localStorage.getItem('userInfo')).l_name;
+          // this.number = JSON.parse(localStorage.getItem('userInfo')).phone;
+          // this.password = JSON.parse(localStorage.getItem('userInfo')).password;
+          this.$bvModal.hide('reset-modal');
+          this.isDisabled = true;
+        }
+      });
+      
     },
     dropHandler(index) {
       let d = this.tags[index];

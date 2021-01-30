@@ -864,10 +864,10 @@
                   >5</span
                 >
               </button>
-              <h1 class="mb-0 fs-18 border-left p-2">Nasir Bello</h1>
+              <h1 class="mb-0 fs-18 border-left p-2">{{user.f_name + " " + user.l_name}}</h1>
               <div class="d-flex align-center">
                 <img
-                  src="../assets/photoprofileImage.png"
+                  v-bind:src="avatar"
                   width="49"
                   height="49"
                 />
@@ -1021,6 +1021,8 @@ export default {
   name: "AdminDashboard",
   data() {
     return {
+      user: JSON.parse(localStorage.getItem('userInfo')),
+      avatar: localStorage.getItem('avatar'),
       role: localStorage.getItem("role"),
       quickSearch: this.$t("adminDashBoardQuickSearch"),
       activeSideBar: [

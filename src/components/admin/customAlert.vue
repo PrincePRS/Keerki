@@ -1,5 +1,5 @@
 <template>
-  <div v-if="alert === 2" class=" d-flex mt-4 mt-lg-0 align-items-center mb-3 width-100">
+  <div v-if="alert === 420" class=" d-flex mt-4 mt-lg-0 align-items-center mb-3 width-100">
     <svg
       width="33"
       height="29"
@@ -19,7 +19,7 @@
     </div>
   </div>
   <div
-    v-else-if="alert === 3"
+    v-else-if="alert === 421"
     class="d-flex mt-4 mt-lg-0 align-items-center mb-3"
   >
     <svg
@@ -42,7 +42,7 @@
     </div>
   </div>
   <div
-    v-else-if="alert === 4"
+    v-else-if="alert === 422"
     class="d-flex mt-4 mt-lg-0 align-items-center mb-3"
   >
     <svg
@@ -65,7 +65,7 @@
     </div>
   </div>
   <div
-    v-else-if="alert === 5"
+    v-else-if="alert === 423"
     class="d-flex mt-4 mt-lg-0 align-items-center mb-3"
   >
     <svg
@@ -88,7 +88,7 @@
     </div>
   </div>
   <div
-    v-else-if="alert === 6"
+    v-else-if="alert === 424"
     class="d-flex mt-4 mt-lg-0 align-items-center mb-3"
   >
     <svg
@@ -109,7 +109,7 @@
     </div>
   </div>
   <div
-    v-else-if="alert === 7"
+    v-else-if="alert === 426"
     class="d-flex mt-4 mt-lg-0 align-items-center mb-3"
   >
     <svg
@@ -131,7 +131,7 @@
     </div>
   </div>
   <div
-    v-else-if="alert === 8"
+    v-else-if="alert === 427"
     class="d-flex mt-4 mt-lg-0 align-items-center mb-3"
   >
     <svg

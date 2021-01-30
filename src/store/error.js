@@ -1,7 +1,7 @@
 export default {
     namespaced: true,
     state: {
-      validations: {}
+      validations: 200
     },
     mutations: {
       setValidationError(state, error) {
